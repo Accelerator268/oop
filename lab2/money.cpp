@@ -113,38 +113,6 @@ Money::~Money() {
     delete[] digits;
 }
 
-// Оператор присваивания копированием
-Money& Money::operator=(const Money& other) {
-    if (this != &other) {
-        delete[] digits;
-        
-        size = other.size;
-        is_negative = other.is_negative;
-        digits = new unsigned char[size];
-        
-        for (size_t i = 0; i < size; ++i) {
-            digits[i] = other.digits[i];
-        }
-    }
-    return *this;
-}
-
-// Оператор присваивания перемещением
-Money& Money::operator=(Money&& other) noexcept {
-    if (this != &other) {
-        delete[] digits;
-        
-        digits = other.digits;
-        size = other.size;
-        is_negative = other.is_negative;
-        
-        other.digits = nullptr;
-        other.size = 0;
-        other.is_negative = false;
-    }
-    return *this;
-}
-
 // Удаление ведущих нулей
 void Money::removeLeadingZeros() {
     if (size == 0) return;
