@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/money_app.dir/money.cpp.o CMakeFiles/money_app.dir/main.cpp.o -o bin/money_app 
