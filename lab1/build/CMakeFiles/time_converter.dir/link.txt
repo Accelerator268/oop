@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/time_converter.dir/main.cpp.o -o time_converter 
