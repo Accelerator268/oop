@@ -1,3 +1,0 @@
-/home/dima/oop/lab2/build/CMakeFiles/money_app.dir
-/home/dima/oop/lab2/build/CMakeFiles/edit_cache.dir
-/home/dima/oop/lab2/build/CMakeFiles/rebuild_cache.dir
