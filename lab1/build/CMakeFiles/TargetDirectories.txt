@@ -1,3 +1,0 @@
-/home/dima/oop/lab1/build/CMakeFiles/time_converter.dir
-/home/dima/oop/lab1/build/CMakeFiles/edit_cache.dir
-/home/dima/oop/lab1/build/CMakeFiles/rebuild_cache.dir
