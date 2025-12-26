@@ -23,11 +23,7 @@ CustomMemoryResource::~CustomMemoryResource() {
     for (auto& block : blocks_) {
         if (block.ptr && block.is_allocated) {
             std::cerr << "ERROR: Block " << block.ptr << " was not deallocated properly!\n";
-#ifdef _WIN32
-            _aligned_free(block.ptr);
-#else
             free(block.ptr);
-#endif
         }
     }
     
@@ -55,20 +51,13 @@ void* CustomMemoryResource::do_allocate(size_t bytes, size_t alignment) {
     //Не нашли подходящий блок - выделяем новый
     void* ptr = nullptr;
     
-#ifdef _WIN32
-    ptr = _aligned_malloc(bytes, alignment);
-    if (!ptr) {
-        throw std::bad_alloc();
-    }
-#else
-    //Используем aligned_alloc для Linux/Mac
+    //Используем posix_memalign для Linux
     if (alignment < sizeof(void*)) {
         alignment = sizeof(void*);
     }
     if (posix_memalign(&ptr, alignment, bytes) != 0) {
         throw std::bad_alloc();
     }
-#endif
     
     if (!ptr) {
         throw std::bad_alloc();
@@ -94,11 +83,7 @@ void CustomMemoryResource::do_deallocate(void* p, size_t bytes, size_t alignment
                           << " size: " << bytes << " bytes\n";
                 
                 //Вариант 1: Освобождаем физически и удаляем из списка
-#ifdef _WIN32
-                _aligned_free(p);
-#else
                 free(p);
-#endif
                 
                 blocks_.erase(it);
                 return;
@@ -117,11 +102,7 @@ void CustomMemoryResource::do_deallocate(void* p, size_t bytes, size_t alignment
     //Если блок не найден в нашем пуле, освобождаем напрямую
     //(возможно, был выделен другим аллокатором)
     std::cout << "Deallocating external block: " << p << std::endl;
-#ifdef _WIN32
-    _aligned_free(p);
-#else
     free(p);
-#endif
     
     (void)bytes;
     (void)alignment;
@@ -173,11 +154,7 @@ void CustomMemoryResource::cleanup() {
     for (auto it = blocks_.begin(); it != blocks_.end(); ) {
         if (!it->is_allocated) {
             if (it->ptr) {
-#ifdef _WIN32
-                _aligned_free(it->ptr);
-#else
                 free(it->ptr);
-#endif
             }
             it = blocks_.erase(it);
         } else {
@@ -186,4 +163,5 @@ void CustomMemoryResource::cleanup() {
     }
     
     std::cout << "Cleanup completed. Remaining blocks: " << blocks_.size() << "\n";
+}d. Remaining blocks: " << blocks_.size() << "\n";
 }
